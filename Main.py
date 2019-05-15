@@ -1,6 +1,7 @@
 from Decomposers import Decomposer
 from Producers import Producer
 from Consumers import Consumer
+import tkinter
 import time
 
 Producer()
