@@ -1,4 +1,5 @@
 import random
+
 class Decomposer:
     countD = 0
     listD = []
@@ -18,12 +19,11 @@ class Decomposer:
             self.die()
         elif self.produce == True:
             self.food()
-            self.reproduce()
     def die(self):
         Decomposer.countD -= 1
         Decomposer.listD.remove(self)
-        Decomposer.deadFood += 1
-        print("RIP D")
+        Decomposer.deadFood += self.age//2
+        #print("RIP D")
     def eat(self,deadFood):
         if deadFood > 0:
             deadFood -= 1
@@ -38,4 +38,4 @@ class Decomposer:
         if self.reproductive == 1 and random.randint(0,1) == 0:
             self.reproductive = 2
             Decomposer()
-            print("New D")
+            #print("New D")

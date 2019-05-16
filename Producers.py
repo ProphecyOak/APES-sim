@@ -13,18 +13,17 @@ class Producer:
         Producer.listP += [self]
     def grow(self):
         self.age += 1
-        if self.age > 2:
+        if self.age > 4:
             self.reproductive = 1
-        if self.age > 7:
+        if self.age > 20:
             self.die()
         elif self.produce == True:
             self.food()
-            self.reproduce()
     def die(self):
         Producer.countP -= 1
         Producer.listP.remove(self)
-        Producer.deadFood += 1
-        print("RIP P")
+        Producer.deadFood += self.age//2
+        #print("RIP P")
     def eat(self,nutrients):
         self.grow()
         if nutrients > 0:
@@ -33,9 +32,9 @@ class Producer:
             return nutrients
         return nutrients
     def food(self):
-        Producer.foodP += 2
+        Producer.foodP += 1
     def reproduce(self):
         if self.reproductive == 1 and random.randint(0,2) == 0:
             self.reproductive = 2
             Producer()
-            print("New P")
+            #print("New P")
