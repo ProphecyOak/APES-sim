@@ -39,6 +39,7 @@ def gene():
     gen += 1
     master.update()
 master = tkinter.Tk()
+master.geometry("%dx%d+%d+%d" % (W+100,H+100,0,0))
 B = tkinter.Button(master,command=gene,text="Next Gen.")
 B.grid(row=1,column=0, sticky="N")
 L = tkinter.Label(master,text="R: " + str(int(newData[gen][0])) + " P: " + str(int(newData[gen][1])))
@@ -51,4 +52,5 @@ for x in range(0,H,50):
     C.create_text(10,H-x*3-20,text=x)
 C.create_rectangle(gen*13+15+Z,(H-20),gen*13+20+Z,(H-20)-newData[gen][0]*3,fill="blue")
 C.create_rectangle(gen*13+20+Z,(H-20),gen*13+25+Z,(H-20)-newData[gen][1]*3,fill="red")
-gene()
+for x in range(100):
+    gene()
