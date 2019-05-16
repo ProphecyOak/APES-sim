@@ -1,4 +1,5 @@
 import tkinter
+import math
 
 newFile = open(r"Data.txt",mode="r")
 exec(newFile.read())
@@ -24,6 +25,22 @@ for x in dataList:
 for x in range(len(newData)):
     c = newData[x]
     newData[x] = [int(c[0]),int(c[1])]
+diffList0 = []
+diffList1 = []
+for x in dataList:
+    for y in x:
+        i = x.index(y)
+        diffList0.append(y[0]-newData[i][0])
+        diffList1.append(y[1]-newData[i][1])
+for i in range(len(diffList0)):
+    diffList0[i] = diffList0[i]**2
+    diffList1[i] = diffList1[i]**2
+diff0 = sum(diffList0)
+diff1 = sum(diffList1)
+var0 = diff0/len(diffList0)
+var1 = diff1/len(diffList1)
+staDev0 = math.sqrt(var0)
+staDev1 = math.sqrt(var1)
 #Wipe()
 print(newData)
 gen = 1

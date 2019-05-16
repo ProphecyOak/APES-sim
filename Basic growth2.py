@@ -28,9 +28,9 @@ def Test():
         resources += abs(int(changeInResources+random.randint(-5,5))) #Fluctuating Logistic Growth
         #resources += int(changeInResources * (random.random() + .5)) #Wild
         #resources += random.randint(-10,20)*pop/100 + .8*pop #Die Out Fast
-        #resources += pop #Constant
-        #resources += pop*1.2 #Competition Die Out
-        #resources += pop*1.5 #Stablish
+        #resources += len(pop) + 1 #Constant
+        #resources += len(pop)*1.2 #Competition Die Out
+        #resources += len(pop)*1.5 #Stablish
         if resources < 0:
             resources = 0
         oldResources = resources
@@ -92,7 +92,7 @@ def Test():
     popZ = 0
     testNum += 1
     master.destroy()
-for x in range(100):
+for x in range(1000):
     Test()
     print("\nTest:",testNum)
 character = 0
