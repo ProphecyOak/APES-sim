@@ -15,10 +15,10 @@ fruit = 0
 oldResources = 100
 maxPop = 1
 gen = 0
-W = 2155
+W = 1400
 H = 600
 Z = 20
-Si = 8
+Si = 6
 Sp = 6
 """Read Save Data"""
 newFile = open(r"Data.txt",mode="r")
@@ -27,7 +27,7 @@ newFile.close()
 testNum = dataList[-1]
 dataList = dataList[:-1]
 """Input 1"""
-genNum = 100#input("How Many Generations?\n>>> ")
+genNum = 0#input("How Many Generations?\n>>> ")
 """Functions"""
 def Test():
     global gen, pop, gen, oldResources, maxPop, W, H, Z, resources, dataList, testNum, popPro, fruit
@@ -38,7 +38,7 @@ def Test():
         global gen,pop, gen, oldResources, maxPop, W, H, Z, resources, dataList, testNum, genNum, popPro, fruit
         global proColor, conColor, resColor, bacColor
         """Resource Generation"""
-        #"""
+        """
         for x in popPro:
             if int(resources) < len(popPro):
                 for y in range(len(popPro)-int(resources)):
@@ -49,27 +49,24 @@ def Test():
                         oldest = x
                         maxAge = x.age
                 popPro.remove(oldest)
-            if x.grow() == "D":
+            elif x.grow() == "D":
                 popPro.remove(x)
                 resources += x.age
             else:
-                totFood = 0
-                for x in range(int(resources)):
-                    totFood += 1
-                    if totFood >= 10:
-                        break
-                if totFood > 1:
-                    fruit += random.randint(1,totFood)
-                elif totFood == 1:
-                    fruit += 1
-                resources -= totFood
+                if resources >= 10:
+                    fruitNum = random.randint(0,4)
+                    fruit += fruitNum
+                    resources -= fruitNum
+                else:
+                    fruit += resources
+                    resources = 0
         for x in range(fruit):
             fruit -= 1
-            resources += 2.1
+            resources += 2
             if random.randint(0,9) == 0:
                 popPro.append(Producer())
-        #"""
         """
+        #"""
         changeInResources = abs(int(resources) - oldResources)
         #resources += (100 - (random.random()-.01)*resources) #Tall Logistic Growth
         #resources += 100 - resources #Simple Logistic Growth
@@ -82,7 +79,7 @@ def Test():
         if resources < 0:
             resources = 0
         oldResources = resources
-        """
+        #"""
         """Gen Update"""
         gen += 1
         """Growth"""
@@ -149,17 +146,13 @@ def Test():
     maxPop = 1
     popZ = 0
     testNum += 1
-    master.destroy()
+    #master.destroy()
 """Run Tests"""
-thing = 100#input("How Many Runs?\n>>> ")
+thing = 1#input("How Many Runs?\n>>> ")
 for x in range(int(thing)):
     Test()
     print("\nTest:",testNum)
 """Saved Data Write"""
-character = 0
-for x in range(len(str(testNum))):
-    if dataList[x] == ",":
-        character = x
 dataList.append(testNum)
 newFile = open(r"Data.txt",mode="w")
 newFile.write("dataList = " + str(dataList))
