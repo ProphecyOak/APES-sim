@@ -9,7 +9,10 @@ def Wipe():
     newFile.write("dataList = [0]")
     newFile.close()
 dataList = dataList[:-1]
-
+proColor = "forest green"
+conColor = "firebrick3"
+resColor = "steelblue"
+bacColor = "gainsboro"
 maxGen = 0
 for x in dataList:
     if len(x) > maxGen:
@@ -50,44 +53,47 @@ for x in range(len(staDev)):
     staDev[x][2] = int(math.sqrt(staDev[x][2]/staDev[x][5]))
 #Wipe()
 gen = 0
-W = 1400
+W = 2155
 H = 600
 Z = 20
+Si = 6
+Sp = 6
 def gene():
     global gen, newData, W, H, Z, staDev
-    L.config(text="R: " + str(int(newData[gen][0])) + " C: " + str(newData[1]) + " P: " + str(newData[2]))
+    L.config(text="R: " + str(int(newData[gen][0])) + " C: " + str(newData[gen][1]) + " P: " + str(newData[gen][2]))
     L2.config(text="Gen: " + str(gen))
-    C.create_rectangle(gen*18+15+Z,  (H-20),                                      gen*18+20+Z,  (H-20)-int(newData[gen][0])*3,               fill="blue")
-    C.create_line(     gen*18+17.5+Z,(H-20-int(newData[gen][0])*3),               gen*18+17.5+Z,(H-20-int(newData[gen][0])*3)-staDev[gen][0],fill="blue")
-    C.create_line(     gen*18+15+Z,  (H-20-int(newData[gen][0])*3)-staDev[gen][0],gen*18+20+Z,  (H-20-int(newData[gen][0])*3)-staDev[gen][0],fill="blue")
+    C.create_rectangle(gen*(3*Si+3)+Sp+Z,(H-20),gen*(3*Si+3)+2*Sp+Z,(H-20)-int(newData[gen][0])*3,fill=resColor,outline="")
+    C.create_line(gen*(3*Si+3)+1.5*Sp+Z,(H-20-int(newData[gen][0])*3),gen*(3*Si+3)+Sp*1.5+Z,(H-20-int(newData[gen][0])*3)-staDev[gen][0],fill=resColor)
+    C.create_line(gen*(3*Si+3)+Sp+Z,(H-20-int(newData[gen][0])*3)-staDev[gen][0],gen*(3*Si+3)+2*Sp+Z,(H-20-int(newData[gen][0])*3)-staDev[gen][0],fill=resColor)
     
-    C.create_rectangle(gen*18+20+Z,  (H-20),                                      gen*18+25+Z,  (H-20)-int(newData[gen][1])*3,               fill="red")
-    C.create_line(     gen*18+22.5+Z,(H-20-int(newData[gen][1])*3),               gen*18+22.5+Z,(H-20-int(newData[gen][1])*3)-staDev[gen][1],fill="red")
-    C.create_line(     gen*18+20+Z,  (H-20-int(newData[gen][1])*3)-staDev[gen][1],gen*18+25+Z,  (H-20-int(newData[gen][1])*3)-staDev[gen][1],fill="red")
+    C.create_rectangle(gen*(3*Si+3)+2*Sp+Z,(H-20),gen*(3*Si+3)+3*Sp+Z,(H-20)-int(newData[gen][1])*3,fill=conColor,outline="")
+    C.create_line(gen*(3*Si+3)+2.5*Sp+Z,(H-20-int(newData[gen][1])*3),gen*(3*Si+3)+2.5*Sp+Z,(H-20-int(newData[gen][1])*3)-staDev[gen][1],fill=conColor)
+    C.create_line(gen*(3*Si+3)+2*Sp+Z,(H-20-int(newData[gen][1])*3)-staDev[gen][1],gen*(3*Si+3)+3*Sp+Z,(H-20-int(newData[gen][1])*3)-staDev[gen][1],fill=conColor)
     
-    C.create_rectangle(gen*18+25+Z,  (H-20),                                      gen*18+30+Z,  (H-20)-int(newData[gen][2])*3,               fill="green")
-    C.create_line(     gen*18+27.5+Z,(H-20-int(newData[gen][2])*3),               gen*18+27.5+Z,(H-20-int(newData[gen][2])*3)-staDev[gen][2],fill="green")
-    C.create_line(     gen*18+25+Z,  (H-20-int(newData[gen][2])*3)-staDev[gen][2],gen*18+30+Z,  (H-20-int(newData[gen][2])*3)-staDev[gen][2],fill="green")
+    C.create_rectangle(gen*(3*Si+3)+3*Sp+Z,(H-20),gen*(3*Si+3)+4*Sp+Z,(H-20)-int(newData[gen][2])*3,fill=proColor,outline="")
+    C.create_line(gen*(3*Si+3)+3.5*Sp+Z,(H-20-int(newData[gen][2])*3),gen*(3*Si+3)+3.5*Sp+Z,(H-20-int(newData[gen][2])*3)-staDev[gen][2],fill=proColor)
+    C.create_line(gen*(3*Si+3)+3*Sp+Z,(H-20-int(newData[gen][2])*3)-staDev[gen][2],gen*(3*Si+3)+4*Sp+Z,(H-20-int(newData[gen][2])*3)-staDev[gen][2],fill=proColor)
     
     gen += 1
     if (gen)%5 == 0:
-        C.create_text(gen*18+20+Z,H-10,text=gen)
+        C.create_text(gen*(3*Si+3)+2.5*Sp+Z,H-10,text=gen)
     master.update()
 master = tkinter.Tk()
-master.geometry("%dx%d+%d+%d" % (W+100,H+100,0,0))
+master.geometry("%dx%d+%d+%d" % (W,H+30,0,0))
 B = tkinter.Button(master,command=gene,text="Next Gen.")
-B.grid(row=1,column=0, sticky="N")
+B.grid(row=0,column=2, sticky="N")
 L = tkinter.Label(master,text="R: " + str(int(newData[gen][0])) + " P: " + str(int(newData[gen][1])))
 L.grid(row=0,column=1, sticky="W")
 L2 = tkinter.Label(master,text="Gen: " + str(gen))
 L2.grid(row=0,column=0)
-C = tkinter.Canvas(master,width=W,height=H)
-C.grid(row=1,column=1)
+C = tkinter.Canvas(master,width=W,height=H,bg=bacColor)
+C.grid(row=1,column=0,columnspan=30)
 for x in range(0,H,50):
     C.create_text(10,H-x*3-20,text=x)
-C.create_rectangle(gen*18+15+Z,(H-20),gen*18+20+Z,(H-20)-newData[gen][0]*3,fill="blue")
-C.create_rectangle(gen*18+20+Z,(H-20),gen*18+25+Z,(H-20)-newData[gen][1]*3,fill="red")
-C.create_rectangle(gen*18+25+Z,(H-20),gen*18+30+Z,(H-20)-newData[gen][2]*3,fill="green")
+C.create_rectangle(gen*(3*Si+3)+Sp+Z,(H-20),gen*(3*Si+3)+2*Sp+Z,(H-20)-newData[gen][0]*3,fill=resColor,outline=resColor)
+C.create_rectangle(gen*(3*Si+3)+2*Sp+Z,(H-20),gen*(3*Si+3)+3*Sp+Z,(H-20)-newData[gen][1]*3,fill=conColor,outline=conColor)
+C.create_rectangle(gen*(3*Si+3)+3*Sp+Z,(H-20),gen*(3*Si+3)+4*Sp+Z,(H-20)-newData[gen][2]*3,fill=proColor,outline=proColor)
+C.create_text(gen*(3*Si+3)+2.5*Sp+Z,H-10,text=gen)
 for x in range(len(newData)):
     gene()
 print(gen)
