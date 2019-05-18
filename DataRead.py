@@ -43,7 +43,6 @@ for x in range(len(newData)):
             staDev[x][2] += (y[x][2]-newData[x][2])**2
             staDev[x][5] += 1
         else:
-            #pass
             staDev[x][0] += (0)**2
             staDev[x][1] += (0)**2
             staDev[x][2] += (0)**2
@@ -51,6 +50,18 @@ for x in range(len(staDev)):
     staDev[x][0] = int(math.sqrt(staDev[x][0]/staDev[x][3]))
     staDev[x][1] = int(math.sqrt(staDev[x][1]/staDev[x][4]))
     staDev[x][2] = int(math.sqrt(staDev[x][2]/staDev[x][5]))
+
+Avgs = [[],[],[]]
+for x in range(len(newData)):
+    for y in dataList:
+        if len(y) > x:
+            Avgs[0].append(y[x][0])
+            Avgs[1].append(y[x][1])
+            Avgs[2].append(y[x][2])
+Avgs[0] = sum(Avgs[0])/len(Avgs[0])
+Avgs[1] = sum(Avgs[1])/len(Avgs[1])
+Avgs[2] = sum(Avgs[2])/len(Avgs[2])
+print(Avgs)
 #Wipe()
 gen = 0
 W = 2155
@@ -96,4 +107,6 @@ C.create_rectangle(gen*(3*Si+3)+3*Sp+Z,(H-20),gen*(3*Si+3)+4*Sp+Z,(H-20)-newData
 C.create_text(gen*(3*Si+3)+2.5*Sp+Z,H-10,text=gen)
 for x in range(len(newData)):
     gene()
-print(gen)
+C.create_line(Z,Avgs[0],W,Avgs[0],fill=resColor)
+C.create_line(Z,Avgs[1],W,Avgs[1],fill=conColor)
+C.create_line(Z,Avgs[2],W,Avgs[2],fill=proColor)
