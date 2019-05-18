@@ -1,10 +1,10 @@
 import random
 
 class Consumer:
-    def __init__(self):
+    def __init__(self,deadAge=10):
         self.age = 0
         self.reproductive = 1
-        self.deadAge = 3
+        self.deadAge = deadAge
     def grow(self):
         self.age += 1
         if self.age > self.deadAge:

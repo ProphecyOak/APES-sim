@@ -32,14 +32,21 @@ dataList = dataList[:-1]
 
 
 ###Start Values###
+cType = input("K or R?\n>>> ").upper()
 gen = 0
-cPop = [Consumer()]
+if cType == "K":
+    cPop = [Consumer()]#K
+elif cType == "R":
+    cPop = [Consumer(3)]#R
 pPop = [Producer()]
 resources = 100
 fruit  = 0
 
+
+###Place Holder Function###
 def Gene():
-    print("oof")
+    pass
+
 
 ###Set-Up Graphics###
 master = tkinter.Tk()
@@ -57,18 +64,25 @@ C.grid(row=1,column=0,columnspan=30)
 ###Generation Function###
 def Gene(gen, cPop, pPop, resources, fruit):
     global proColor, conColor, resColor, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, L, L2, C
+    global B, L, L2, C, cType
     gen += 1
 
 
     ### K Resources Generation###
-    #resources += 100- resources
+    if cType == "K":
+        resources += 100 - resources + random.randint(0,1)
 
 
     ### R Resource Generation###
-    resources += random.randint(0,30)
-    
-    
+    elif cType == "R":
+        if gen%10 == 0:
+            resources += 50 + random.randint(-5,5)
+        else:
+            resources += 2 + random.randint(0,1)
+            if resources < 0:
+                resources = 0
+        
+        
     ###Consumer Growth###
     cPop.sort()
     for x in cPop:
@@ -82,20 +96,21 @@ def Gene(gen, cPop, pPop, resources, fruit):
 
 
     ### K Consumer Reproduction###
-    """
-    for x in cPop:
-        if x.reproductive == 1:
-            if resources > 20 and random.randint(0,1) == 0:
-                cPop.append(Consumer())
-                resources -= 5
-    """
-    ### R Consumer Reproduction###
+    if cType == "K":
+        for x in cPop:
+            if x.reproductive == 1:
+                if resources > 20 and random.randint(0,1) == 0:
+                    cPop.append(Consumer())
+                    resources -= 5
 
-    z = 0
-    while resources > 0 and z < len(cPop)*5:
-        cPop.append(Consumer())
-        resources -= 1
-        z += 1
+                
+    ### R Consumer Reproduction###
+    elif cType == "R":
+        z = 0
+        while resources > 0 and z < len(cPop):
+            cPop.append(Consumer())
+            resources -= 1
+            z += 1
 
         
     ###Data Add###
@@ -121,7 +136,7 @@ def Gene(gen, cPop, pPop, resources, fruit):
 ###Test Function###
 def Test():
     global proColor, conColor, resColor, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, L, L2, C, genNum, gen, cPop, pPop, resources, fruit
+    global B, L, L2, C, genNum, gen, cPop, pPop, resources, fruit, cType
     dataList.insert(0,[])
     C.delete("all")
     L.config(text="R: " + str(int(resources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
@@ -142,11 +157,14 @@ def Test():
 
 
 ###Run Tests###
-testNum = 100#input("How many tests?\n>>> ")
+testNum = 1#input("How many tests?\n>>> ")
 for x in range(int(testNum)):
     Test()
     gen = 0
-    cPop = [Consumer()]
+    if cType == "K":
+        cPop = [Consumer()]
+    elif cType == "R":
+        cPop = [Consumer(3)]
     pPop = [Producer()]
     resources = 100
     fruit  = 0
