@@ -16,13 +16,13 @@ proRes = "maroon"
 bacColor = "gainsboro"
 Si = 4
 Sp = 8
-W = 50+genNum*(3*Sp+3)#1400
+W = 1800#50+genNum*(3*Sp+3)
 H = 600
 Z = 20
 
 
 ###Generation Number###
-genNum = 50#input("How many generations?\n>>> ")
+genNum = 0#input("How many generations?\n>>> ")
 
 
 ###Open Save Data###
@@ -34,7 +34,7 @@ dataList = dataList[:-1]
 
 
 ###Start Values###
-cType = "K0"#input("K or R?\n>>> ").upper()
+cType = input("K0 or KP or R0 or RP?\n>>> ").upper()
 gen = 0
 if cType in ["K0","KP"]:
     cPop = [Consumer()]#K
@@ -50,7 +50,8 @@ fruit  = 0
 ###Place Holder Function###
 def Gene():
     pass
-
+def ThanosSnap():
+    pass
 
 ###Set-Up Graphics###
 master = tkinter.Tk()
@@ -68,7 +69,7 @@ C.grid(row=1,column=0,columnspan=30)
 ###Generation Function###
 def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, L, L2, C, cType
+    global B, B2, L, L2, C, cType
     gen += 1
 
 
@@ -168,10 +169,40 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     return gen, cPop, pPop, cResources, fruit, pResources
 
 
+def ThanosSnap():
+    global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
+    global B, B2, L, L2, C, genNum, gen, cPop, pPop, cResources, fruit, cType, pResources
+    gen += 1
+    print(len(cPop),len(pPop))
+    pPop = random.choices(pPop,k=len(pPop)//2)
+    cPop = random.choices(cPop,k=len(cPop)//2)
+    print(len(cPop),len(pPop))
+
+    ###Data Add###
+    dataList[0].append([int(cResources),len(cPop),len(pPop),int(pResources)])
+
+
+    ###Graphics Update###
+    L.config(text="pR: " + str(int(pResources)) + " cR: " + str(int(cResources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
+    L2.config(text="Gen: " + str(gen))
+    B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
+    C.create_rectangle(gen*(3*Sp+3)+Si+Z,(H-20),gen*(3*Sp+3)+2*Si+Z,(H-20)-(int(pResources)*3),fill=proRes,outline="")
+    C.create_rectangle(gen*(3*Sp+3)+2*Si+Z,(H-20),gen*(3*Sp+3)+3*Si+Z,(H-20)-(int(cResources)*3),fill=conRes,outline="")
+    C.create_rectangle(gen*(3*Sp+3)+3*Si+Z,(H-20),gen*(3*Sp+3)+4*Si+Z,(H-20)-len(cPop)*3,fill=conColor,outline="")
+    C.create_rectangle(gen*(3*Sp+3)+4*Si+Z,(H-20),gen*(3*Sp+3)+5*Si+Z,(H-20)-len(pPop)*3,fill=proColor,outline="")
+    if (gen)%5 == 0:
+        C.create_text(gen*(3*Sp+3)+3*Si+Z,H-10,text=gen)
+    master.update()
+
+
+B2 = tkinter.Button(master,command=ThanosSnap,text="Thanos Snap!")
+B2.grid(row=0,column=3, sticky="N")
+
+
 ###Test Function###
 def Test():
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, L, L2, C, genNum, gen, cPop, pPop, cResources, fruit, cType, pResources
+    global B, B2, L, L2, C, genNum, gen, cPop, pPop, cResources, fruit, cType, pResources
     dataList.insert(0,[])
     C.delete("all")
     L.config(text="pR: " + str(int(pResources)) + " cR: " + str(int(cResources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
