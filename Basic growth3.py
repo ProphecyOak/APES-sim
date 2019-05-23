@@ -14,15 +14,17 @@ conColor = "firebrick3"
 conRes = "steelblue"
 proRes = "maroon"
 bacColor = "gainsboro"
-Si = 4
-Sp = 8
+Si = 18
+Sp = 18
 W = 1800#50+genNum*(3*Sp+3)
 H = 600
 Z = 20
+barNum = 2
+barCount = 0
 
 
 ###Generation Number###
-genNum = int(input("How many generations?\n>>> "))
+genNum = 20#int(input("How many generations?\n>>> "))
 
 
 ###Open Save Data###
@@ -34,7 +36,7 @@ dataList = dataList[:-1]
 
 
 ###Start Values###
-cType = input("K0 or KP or R0 or RP?\n>>> ").upper()
+cType = "KP"#input("K0 or KP or R0 or RP?\n>>> ").upper()
 gen = 0
 if cType in ["K0","KP"]:
     cPop = [Consumer()]#K
@@ -65,11 +67,15 @@ L2.grid(row=0,column=0)
 C = tkinter.Canvas(master,width=W,height=H,bg=bacColor)
 C.grid(row=1,column=0,columnspan=30)
 
+def barMake(num,co,gen):
+    global C, barNum, Si, Sp, Z, H, barCount
+    C.create_rectangle(gen*(barNum*Si+Sp)+barCount*Si+Z,(H-20),gen*(barNum*Si+Sp)+(barCount+1)*Si+Z,(H-20)-(int(num)*3),fill=co,outline="")
+    barCount += 1
 
 ###Generation Function###
 def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, B2, L, L2, C, cType
+    global B, B2, L, L2, C, cType, barNum, barCount
     gen += 1
     print(gen)
 
@@ -156,12 +162,16 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     L.config(text="pR: " + str(int(pResources)) + " cR: " + str(int(cResources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
     L2.config(text="Gen: " + str(gen))
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
-    C.create_rectangle(gen*(3*Sp+3)+Si+Z,(H-20),gen*(3*Sp+3)+2*Si+Z,(H-20)-(int(pResources)*3),fill=proRes,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+2*Si+Z,(H-20),gen*(3*Sp+3)+3*Si+Z,(H-20)-(int(cResources)*3),fill=conRes,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+3*Si+Z,(H-20),gen*(3*Sp+3)+4*Si+Z,(H-20)-len(cPop)*3,fill=conColor,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+4*Si+Z,(H-20),gen*(3*Sp+3)+5*Si+Z,(H-20)-len(pPop)*3,fill=proColor,outline="")
+    barMake(len(cPop),conColor, gen)
+    if barNum > 1:
+        barMake(cResources,conRes, gen)
+        if barNum > 2:
+            barMake(pResources,proRes, gen)
+            if barNum > 3:
+                barMake(len(pPop),proColor, gen)
+    barCount = 0
     if (gen)%5 == 0:
-        C.create_text(gen*(3*Sp+3)+3*Si+Z,H-10,text=gen)
+        C.create_text(gen*(barNum*Si+Sp)+barNum*Si/2+Z,H-10,text=gen)
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
     B2.config(command=partial(ThanosSnap,gen))
     master.update()
@@ -173,11 +183,11 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
 
 def ThanosSnap(gen):
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, B2, L, L2, C, genNum, cPop, pPop, cResources, fruit, cType, pResources
+    global B, B2, L, L2, C, genNum, cPop, pPop, cResources, fruit, cType, pResources, barCount
     gen += 1
     print(gen)
     print(len(cPop),len(pPop))
-    pPop = random.choices(pPop,k=len(pPop)//2)
+    #pPop = random.choices(pPop,k=len(pPop)//2)
     cPop = random.choices(cPop,k=len(cPop)//2)
     print(len(cPop),len(pPop))
 
@@ -189,14 +199,15 @@ def ThanosSnap(gen):
     L.config(text="pR: " + str(int(pResources)) + " cR: " + str(int(cResources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
     L2.config(text="Gen: " + str(gen))
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
-    C.create_rectangle(gen*(3*Sp+3)+Si+Z,(H-20),gen*(3*Sp+3)+2*Si+Z,(H-20)-(int(pResources)*3),fill=proRes,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+2*Si+Z,(H-20),gen*(3*Sp+3)+3*Si+Z,(H-20)-(int(cResources)*3),fill=conRes,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+3*Si+Z,(H-20),gen*(3*Sp+3)+4*Si+Z,(H-20)-len(cPop)*3,fill=conColor,outline="")
-    C.create_rectangle(gen*(3*Sp+3)+4*Si+Z,(H-20),gen*(3*Sp+3)+5*Si+Z,(H-20)-len(pPop)*3,fill=proColor,outline="")
+    barMake(pResources,proRes, gen)
+    barMake(cResources,conRes, gen)
+    barMake(len(pPop),proColor, gen)
+    barMake(len(cPop),consColor, gen)
+    barCount  = 0
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
     B2.config(command=partial(ThanosSnap,gen))
     if (gen)%5 == 0:
-        C.create_text(gen*(3*Sp+3)+3*Si+Z,H-10,text=gen)
+        C.create_text(gen*(barNum*Si+Sp)+barNum*Si/2+Z,H-10,text=gen)
     master.update()
     return gen
 
@@ -230,7 +241,7 @@ def Test():
 
 
 ###Run Tests###
-testNum = int(input("How many tests?\n>>> "))
+testNum = 1#int(input("How many tests?\n>>> "))
 for x in range(int(testNum)):
     cPop = []
     if cType in ["K0","KP"]:

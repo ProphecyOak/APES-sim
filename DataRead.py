@@ -4,6 +4,8 @@ import math
 newFile = open(r"Data.txt",mode="r")
 exec(newFile.read())
 newFile.close()
+if len(dataList) <= 1:
+    exit()
 def Wipe():
     newFile = open(r"Data.txt",mode="w")
     newFile.write("dataList = [0]")
@@ -124,3 +126,4 @@ C.create_line(5*(3*Si+3)+Sp+Z,(H-20)-Avgs[0]*3,W,(H-20)-Avgs[0]*3,fill=conRes)
 C.create_line(5*(3*Si+3)+Sp+Z,(H-20)-Avgs[1]*3,W,(H-20)-Avgs[1]*3,fill=conColor)
 C.create_line(5*(3*Si+3)+Sp+Z,(H-20)-Avgs[2]*3,W,(H-20)-Avgs[2]*3,fill=proColor)
 C.create_line(5*(3*Si+3)+Sp+Z,(H-20)-Avgs[3]*3,W,(H-20)-Avgs[3]*3,fill=proRes)
+tkinter.Button(master,text="[WIPE DATA!]",command=Wipe).grid(column=3,row=0)
