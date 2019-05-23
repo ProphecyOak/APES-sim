@@ -14,17 +14,17 @@ conColor = "firebrick3"
 conRes = "steelblue"
 proRes = "maroon"
 bacColor = "gainsboro"
-Si = 18
-Sp = 18
+Si = 12
+Sp = 30
 W = 1800#50+genNum*(3*Sp+3)
 H = 600
 Z = 20
-barNum = 2
+barNum = 2#int(input("How many bars?\n>>> "))
 barCount = 0
 
 
 ###Generation Number###
-genNum = 20#int(input("How many generations?\n>>> "))
+genNum = 0#int(input("How many generations?\n>>> "))
 
 
 ###Open Save Data###
@@ -36,7 +36,13 @@ dataList = dataList[:-1]
 
 
 ###Start Values###
-cType = "KP"#input("K0 or KP or R0 or RP?\n>>> ").upper()
+cType = "K0"#input("K0 or KP or R0 or RP?\n>>> ").upper()
+if cType in ["KP","RP"]:
+    if barNum == 3:
+        barNum = 2
+else:
+    if barNum > 2:
+        barNum = 2
 gen = 0
 if cType in ["K0","KP"]:
     cPop = [Consumer()]#K
@@ -163,12 +169,14 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     L2.config(text="Gen: " + str(gen))
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
     barMake(len(cPop),conColor, gen)
-    if barNum > 1:
+    if barNum > 1 and cType not in ["KP","RP"]:
         barMake(cResources,conRes, gen)
-        if barNum > 2:
-            barMake(pResources,proRes, gen)
-            if barNum > 3:
-                barMake(len(pPop),proColor, gen)
+    elif barNum > 1:
+        barMake(len(pPop),proColor, gen)
+    if barNum > 3:
+        barMake(cResources,conRes, gen)
+        barMake(pResources,proRes, gen)
+    barCount = 0
     barCount = 0
     if (gen)%5 == 0:
         C.create_text(gen*(barNum*Si+Sp)+barNum*Si/2+Z,H-10,text=gen)
@@ -199,10 +207,14 @@ def ThanosSnap(gen):
     L.config(text="pR: " + str(int(pResources)) + " cR: " + str(int(cResources)) + " C: " + str(len(cPop)) + " P: " + str(len(pPop)))
     L2.config(text="Gen: " + str(gen))
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
-    barMake(pResources,proRes, gen)
-    barMake(cResources,conRes, gen)
-    barMake(len(pPop),proColor, gen)
-    barMake(len(cPop),consColor, gen)
+    barMake(len(cPop),conColor, gen)
+    if barNum > 1 and cType not in ["KP","RP"]:
+        barMake(cResources,conRes, gen)
+    elif barNum > 1:
+        barMake(len(pPop),proColor, gen)
+    if barNum > 3:
+        barMake(cResources,conRes, gen)
+        barMake(pResources,proRes, gen)
     barCount  = 0
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
     B2.config(command=partial(ThanosSnap,gen))
@@ -226,7 +238,7 @@ def Test():
     L2.config(text="Gen: " + str(gen))
     B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit,pResources))
     for x in range(0,H,50):
-        C.create_text(10,H-x*3-20,text=x)
+        C.create_text(20,H-x*3-20,text=x)
     for x in range(genNum):
         y = Gene(gen, cPop, pPop, cResources, fruit, pResources)
         gen = y[0]
