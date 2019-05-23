@@ -22,7 +22,7 @@ Z = 20
 
 
 ###Generation Number###
-genNum = 0#input("How many generations?\n>>> ")
+genNum = int(input("How many generations?\n>>> "))
 
 
 ###Open Save Data###
@@ -71,7 +71,7 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
     global B, B2, L, L2, C, cType
     gen += 1
-
+    print(gen)
 
     ### K cResources Generation###
     if cType == "K0":
@@ -162,6 +162,8 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     C.create_rectangle(gen*(3*Sp+3)+4*Si+Z,(H-20),gen*(3*Sp+3)+5*Si+Z,(H-20)-len(pPop)*3,fill=proColor,outline="")
     if (gen)%5 == 0:
         C.create_text(gen*(3*Sp+3)+3*Si+Z,H-10,text=gen)
+    B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
+    B2.config(command=partial(ThanosSnap,gen))
     master.update()
     
 
@@ -169,10 +171,11 @@ def Gene(gen, cPop, pPop, cResources, fruit,pResources):
     return gen, cPop, pPop, cResources, fruit, pResources
 
 
-def ThanosSnap():
+def ThanosSnap(gen):
     global proColor, conColor, conRes, proRes, bacColor, W, H, Z, Si, Sp, dataList, testNum
-    global B, B2, L, L2, C, genNum, gen, cPop, pPop, cResources, fruit, cType, pResources
+    global B, B2, L, L2, C, genNum, cPop, pPop, cResources, fruit, cType, pResources
     gen += 1
+    print(gen)
     print(len(cPop),len(pPop))
     pPop = random.choices(pPop,k=len(pPop)//2)
     cPop = random.choices(cPop,k=len(cPop)//2)
@@ -190,12 +193,15 @@ def ThanosSnap():
     C.create_rectangle(gen*(3*Sp+3)+2*Si+Z,(H-20),gen*(3*Sp+3)+3*Si+Z,(H-20)-(int(cResources)*3),fill=conRes,outline="")
     C.create_rectangle(gen*(3*Sp+3)+3*Si+Z,(H-20),gen*(3*Sp+3)+4*Si+Z,(H-20)-len(cPop)*3,fill=conColor,outline="")
     C.create_rectangle(gen*(3*Sp+3)+4*Si+Z,(H-20),gen*(3*Sp+3)+5*Si+Z,(H-20)-len(pPop)*3,fill=proColor,outline="")
+    B.config(command=partial(Gene, gen, cPop, pPop, cResources, fruit, pResources))
+    B2.config(command=partial(ThanosSnap,gen))
     if (gen)%5 == 0:
         C.create_text(gen*(3*Sp+3)+3*Si+Z,H-10,text=gen)
     master.update()
+    return gen
 
 
-B2 = tkinter.Button(master,command=ThanosSnap,text="Thanos Snap!")
+B2 = tkinter.Button(master,command=partial(ThanosSnap,gen),text="Thanos Snap!")
 B2.grid(row=0,column=3, sticky="N")
 
 
@@ -241,6 +247,7 @@ for x in range(int(testNum)):
     #time.sleep(0.01)
     print(x)
     Test()
+    B2.config(command=partial(ThanosSnap,gen))
 
 
 ###Write Save Data###
